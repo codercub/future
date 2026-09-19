@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Intelligence Lab — Python & AI | Codercub</title>
+<meta name="description" content="Codercub-ийн Future Intelligence Lab: Python мэдлэгтэй ахлах сургуулийн сурагч болон залуучуудад зориулсан жилийн AI хөтөлбөр. Amazon, Microsoft-д ажиллаж байсан Simon Guest багшилна.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0a17;
+    --bg-raised: #14122668;
+    --bg-card: #15132a;
+    --bg-card-2: #1b1836;
+    --line: #2c2850;
+    --text: #f2f0fa;
+    --text-dim: #a8a3c4;
+    --text-faint: #6b6690;
+    --purple: #8b5cf6;
+    --blue: #4f8ff7;
+    --cyan: #22d3ee;
+    --amber: #f2a71b;
+    --amber-dim: #f2a71b22;
+    --radius: 12px;
+    --sans: 'Inter', sans-serif;
+    --display: 'Space Grotesk', sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--sans); line-height:1.65; font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+  h1,h2,h3{ font-family:var(--display); font-weight:600; margin:0 0 16px; line-height:1.15; }
+  h2{ font-size:32px; }
+  h3{ font-size:19px; }
+  p{ margin:0 0 14px; color:var(--text-dim); }
+  .grad-text{
+    background:linear-gradient(90deg, var(--purple), var(--blue), var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .eyebrow{
+    font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--cyan); margin-bottom:12px; display:flex; align-items:center; gap:8px;
+  }
+  section{ padding:88px 0; border-bottom:1px solid var(--line); }
+  .lede{ font-size:17px; max-width:600px; }
+
+  /* ---------- NAV ---------- */
+  header{ position:sticky; top:0; z-index:50; background:rgba(11,10,23,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1120px; margin:0 auto; position:relative; }
+  .brand{ font-family:var(--display); font-size:15px; font-weight:600; text-decoration:none; }
+  .navlinks{ display:flex; align-items:center; gap:30px; }
+  .navlinks .links{ display:flex; gap:26px; }
+  .navlinks a.link{ text-decoration:none; font-size:14.5px; font-weight:500; color:var(--text-dim); }
+  .navlinks a.link:hover{ color:var(--text); }
+  .nav-cta{
+    font-size:14px; font-weight:600; background:linear-gradient(90deg, var(--purple), var(--blue));
+    color:#fff !important; padding:10px 20px; border-radius:var(--radius); text-decoration:none; white-space:nowrap;
+  }
+  .nav-cta:hover{ opacity:.9; }
+  .nav-toggle{ display:none; background:none; border:none; cursor:pointer; width:36px; height:36px; align-items:center; justify-content:center; color:var(--text); }
+  .nav-toggle svg{ width:22px; height:22px; }
+  @media (max-width:840px){
+    .navlinks .links{
+      display:flex; flex-direction:column; gap:0;
+      position:absolute; top:100%; left:0; right:0;
+      background:var(--bg-card); border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden; transition:max-height .25s ease;
+    }
+    .navlinks.open .links{ max-height:320px; }
+    .navlinks .links a{ padding:14px 28px; border-top:1px solid var(--line); font-size:15px; }
+    .nav-cta{ display:none; }
+    .nav-toggle{ display:flex; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; overflow:hidden; padding:72px 0 40px; border-bottom:none; }
+  .hero-bg{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .hero-bg::before{
+    content:''; position:absolute; top:-10%; right:-10%; width:60%; height:70%;
+    background:radial-gradient(circle, #8b5cf633, transparent 65%);
+  }
+  .hero-bg::after{
+    content:''; position:absolute; bottom:-20%; left:-5%; width:50%; height:60%;
+    background:radial-gradient(circle, #22d3ee22, transparent 65%);
+  }
+  .hero-grid{ position:relative; z-index:1; display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:center; }
+  @media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; } }
+  .hero h1{ font-size:42px; max-width:600px; }
+  @media (max-width:500px){ .hero h1{ font-size:32px; } }
+  .hero .lede{ font-size:17.5px; margin-bottom:28px; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary{
+    background:linear-gradient(90deg, var(--purple), var(--blue)); color:#fff; font-weight:600; font-size:15px;
+    padding:14px 26px; border-radius:var(--radius); text-decoration:none; display:inline-block; border:none;
+  }
+  .btn-primary:hover{ opacity:.92; }
+  .btn-ghost{
+    border:1.5px solid var(--line); color:var(--text); font-weight:600; font-size:15px;
+    padding:13px 24px; border-radius:var(--radius); text-decoration:none; display:inline-block; background:var(--bg-card);
+  }
+  .btn-ghost:hover{ border-color:var(--purple); }
+  .hero-photo{
+    position:relative; border-radius:20px; overflow:hidden; border:1px solid var(--line);
+    box-shadow:0 20px 60px rgba(139,92,246,.15);
+  }
+  .hero-photo img{ width:100%; height:auto; display:block; }
+  .hero-photo-tag{
+    position:absolute; bottom:16px; left:16px; background:rgba(11,10,23,.85); backdrop-filter:blur(6px);
+    border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:12.5px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  .hero-photo-tag .dot{ width:7px; height:7px; border-radius:50%; background:var(--cyan); flex:none; }
+
+  /* ---------- QUICK FACTS ---------- */
+  .quickfacts{ padding:16px 0 40px; border-bottom:none; }
+  .qf-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media (max-width:720px){ .qf-grid{ grid-template-columns:1fr 1fr; } }
+  .qf-item{ background:var(--bg-card); padding:20px 22px; display:flex; flex-direction:column; gap:4px; }
+  .qf-label{ font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); font-weight:600; }
+  .qf-value{ font-size:16.5px; font-weight:700; color:var(--text); font-family:var(--display); }
+  .qf-value .qf-sub{ display:block; font-size:12px; font-weight:400; color:var(--text-faint); margin-top:2px; font-family:var(--sans); }
+
+  /* ---------- TRUST ---------- */
+  .trust{ padding:8px 0 80px; border-bottom:1px solid var(--line); }
+  .trust-inner{ display:flex; flex-direction:column; gap:14px; }
+  .trust-item{ display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:var(--text-dim); }
+  .trust-item .dot{ width:6px; height:6px; border-radius:50%; background:var(--cyan); flex:none; margin-top:6px; }
+  .trust-item strong{ color:var(--text); font-weight:600; }
+
+  /* ---------- INSTRUCTOR ---------- */
+  .teacher-card{
+    display:grid; grid-template-columns:280px 1fr; gap:40px; align-items:start;
+    background:var(--bg-card); border:1px solid var(--line); border-radius:20px; padding:32px;
+  }
+  @media (max-width:720px){ .teacher-card{ grid-template-columns:1fr; } }
+  .teacher-card img{ border-radius:14px; width:100%; }
+  .teacher-name{ font-family:var(--display); font-size:22px; font-weight:600; margin-bottom:2px; }
+  .teacher-role{ font-size:13px; color:var(--cyan); font-weight:600; margin-bottom:14px; }
+  .cred-list{ list-style:none; margin:18px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .cred-list li{ display:flex; gap:10px; font-size:14px; color:var(--text-dim); align-items:flex-start; }
+  .cred-list li::before{ content:'▸'; color:var(--purple); flex:none; }
+  .cred-list b{ color:var(--text); font-weight:600; }
+
+  /* ---------- CURRICULUM ---------- */
+  .phase-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-top:36px; }
+  @media (max-width:960px){ .phase-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .phase-grid{ grid-template-columns:1fr; } }
+  .phase-card{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:20px 18px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .phase-num{
+    font-family:var(--display); font-size:12px; font-weight:700; color:var(--bg);
+    background:linear-gradient(135deg, var(--purple), var(--cyan));
+    width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .phase-card h3{ font-size:15.5px; margin:6px 0 2px; }
+  .phase-card .wk{ font-size:11.5px; color:var(--text-faint); font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+  .phase-card p{ font-size:13px; margin:0; color:var(--text-dim); }
+
+  .full-sched{ margin-top:20px; }
+  .full-sched summary{
+    cursor:pointer; list-style:none; font-size:14px; font-weight:600; color:var(--purple);
+    display:flex; align-items:center; gap:8px;
+  }
+  .full-sched summary::-webkit-details-marker{ display:none; }
+  .full-sched summary .plus{ font-family:var(--display); transition:transform .2s ease; }
+  .full-sched[open] summary .plus{ transform:rotate(45deg); }
+  .sched-table{ width:100%; border-collapse:collapse; margin-top:20px; font-size:13.5px; }
+  .sched-table th{ text-align:left; color:var(--text-faint); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; padding:8px 12px; border-bottom:1px solid var(--line); }
+  .sched-table td{ padding:10px 12px; border-bottom:1px solid var(--line); color:var(--text-dim); }
+  .sched-table td.wk-num{ color:var(--text); font-weight:600; font-family:var(--display); }
+  .sched-table tr.break td{ color:var(--text-faint); font-style:italic; }
+
+  /* ---------- FORMAT ---------- */
+  .format-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:36px; }
+  @media (max-width:820px){ .format-grid{ grid-template-columns:1fr; } }
+  .format-card{ background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:26px; }
+  .format-card .icon{ width:38px; height:38px; border-radius:10px; background:var(--amber-dim); color:var(--amber); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:700; margin-bottom:14px; }
+  .format-card h3{ font-size:16.5px; margin-bottom:8px; }
+  .format-card p{ font-size:13.5px; margin:0; }
+
+  /* ---------- PRICING ---------- */
+  .price-card{
+    max-width:440px; margin:36px auto 0; background:var(--bg-card); border:1px solid var(--line);
+    border-radius:20px; padding:36px; text-align:center;
+  }
+  .price-amt{ font-family:var(--display); font-size:40px; font-weight:700; margin:8px 0 4px; }
+  .price-note{ font-size:13px; color:var(--text-faint); margin-bottom:24px; }
+  .price-list{ list-style:none; padding:0; margin:24px 0; text-align:left; display:flex; flex-direction:column; gap:10px; }
+  .price-list li{ display:flex; gap:10px; font-size:14px; color:var(--text-dim); }
+  .price-list li::before{ content:'✓'; color:var(--cyan); font-weight:700; flex:none; }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{ display:flex; flex-direction:column; gap:10px; max-width:760px; }
+  .faq-item{ background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .faq-item summary{
+    list-style:none; cursor:pointer; padding:20px 22px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    font-weight:600; font-size:15px; color:var(--text);
+  }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-item summary .plus{ font-family:var(--display); color:var(--purple); font-size:18px; flex:none; transition:transform .2s ease; }
+  .faq-item[open] summary .plus{ transform:rotate(45deg); }
+  .faq-item .faq-a{ padding:0 22px 20px; font-size:14px; color:var(--text-dim); line-height:1.6; }
+
+  /* ---------- CTA ---------- */
+  .cta{ text-align:center; border-bottom:none; }
+  .cta h2{ margin-bottom:14px; }
+  .cta .lede{ margin:0 auto 28px; }
+  .cta-form-hint{ font-size:12.5px; color:var(--text-faint); margin-top:18px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:36px 0; }
+  .footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .footer-inner p{ font-size:13px; color:var(--text-faint); margin:0; }
+  .footer-links{ display:flex; gap:20px; }
+  .footer-links a{ font-size:13px; color:var(--text-dim); text-decoration:none; }
+  .footer-links a:hover{ color:var(--text); }
+
+  /* ---------- STICKY MOBILE CTA ---------- */
+  .mobile-sticky-cta{ display:none; }
+  @media (max-width:720px){
+    .mobile-sticky-cta{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      position:fixed; left:0; right:0; bottom:0; z-index:60;
+      background:rgba(11,10,23,.96); backdrop-filter:blur(8px);
+      border-top:1px solid var(--line); padding:12px 16px;
+      padding-bottom:calc(12px + env(safe-area-inset-bottom));
+    }
+    .mobile-sticky-cta .msc-label{ font-size:11.5px; color:var(--text-dim); line-height:1.3; }
+    .mobile-sticky-cta .msc-btn{
+      font-weight:700; font-size:13px; background:linear-gradient(90deg, var(--purple), var(--blue));
+      color:#fff; padding:10px 18px; border-radius:var(--radius); text-decoration:none; white-space:nowrap;
+    }
+    body{ padding-bottom:64px; }
+  }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#top" class="brand">Future Intelligence <span class="grad-text">Lab</span></a>
+    <div class="navlinks" id="navlinks">
+      <div class="links">
+        <a class="link" href="#instructor">Багш</a>
+        <a class="link" href="#curriculum">Хөтөлбөр</a>
+        <a class="link" href="#format">Хуваарь</a>
+        <a class="link" href="#pricing">Төлбөр</a>
+        <a class="link" href="#faq">Асуулт</a>
+      </div>
+      <a class="nav-cta" href="https://forms.gle/6uQJT6qrsiUJbDrT9" target="_blank" rel="noopener">Бүртгүүлэх →</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Цэс" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div id="top"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Codercub // AI хөтөлбөр</div>
+      <h1>Python мэддэг үү? <span class="grad-text">AI бүтээх цаг боллоо.</span></h1>
+      <p class="lede">Дата шинжилгээ, neural network-с эхлээд Computer Vision, Generative AI хүртэл — жилийн турш Amazon, Microsoft-д ажиллаж байсан Simon Guest багштай нүүр тулан суралцана.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="https://forms.gle/6uQJT6qrsiUJbDrT9" target="_blank" rel="noopener">Бүртгүүлэх →</a>
+        <a class="btn-ghost" href="#curriculum">Хөтөлбөр үзэх ↓</a>
+      </div>
+    </div>
+    <div class="hero-photo reveal">
+      <img src="assets/images/simon-speaking.jpg" alt="Simon Guest хичээл заяж буй нь">
+      <div class="hero-photo-tag"><span class="dot"></span>2026 зун Монголд заасан</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK FACTS -->
+<section class="quickfacts">
+  <div class="wrap">
+    <div class="qf-grid">
+      <div class="qf-item">
+        <span class="qf-label">Төлбөр</span>
+        <span class="qf-value">₮1,500,000<span class="qf-sub">жилдээ</span></span>
+      </div>
+      <div class="qf-item">
+        <span class="qf-label">Эхлэх огноо</span>
+        <span class="qf-value">2026.10.11<span class="qf-sub">Ням гараг бүр</span></span>
+      </div>
+      <div class="qf-item">
+        <span class="qf-label">Цаг</span>
+        <span class="qf-value">10:00–12:00<span class="qf-sub">Улаанбаатараар</span></span>
+      </div>
+      <div class="qf-item">
+        <span class="qf-label">Шаардлага</span>
+        <span class="qf-value">Python<span class="qf-sub">суурь мэдлэгтэй байх</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="wrap trust-inner">
+    <div class="trust-item"><span class="dot"></span><span><strong>Simon Guest</strong> — Amazon-д Software Development Director, Microsoft-д Technical Strategy Director, DigiPen Institute of Technology-д багшилж байсан туршлагатай</span></div>
+    <div class="trust-item"><span class="dot"></span><span>2026 оны зун Монголд биечлэн ирж, 3 долоо хоногийн танхимын хөтөлбөр амжилттай явуулсан</span></div>
+    <div class="trust-item"><span class="dot"></span><span>Code.org-ийн түнш байгууллагад технологийн захирлаар ажиллаж байсан</span></div>
+    <div class="trust-item"><span class="dot"></span><span>Codercub — 2018 оноос хойш Монголын анхны coding academy</span></div>
+  </div>
+</div>
+
+<!-- INSTRUCTOR -->
+<section id="instructor">
+  <div class="wrap">
+    <div class="eyebrow">Хэн заах вэ</div>
+    <h2 class="reveal">АНУ-аас — биечлэн туршлагатай.</h2>
+    <p class="lede reveal">Онолын биш, бодит industry туршлагатай багш таны хүүхдэд заана.</p>
+
+    <div class="teacher-card reveal">
+      <img src="assets/images/simon-portrait.jpg" alt="Simon Guest">
+      <div>
+        <div class="teacher-name">Simon Guest</div>
+        <div class="teacher-role">Instructor, Future Intelligence Lab</div>
+        <p>20+ жилийн турш Amazon, Microsoft зэрэг дэлхийн тэргүүлэгч технологийн компаниудад удирдах албан тушаал хашиж байсан. Одоо DigiPen Institute of Technology-д багшилдаг. 2026 оны зун Монголд биечлэн ирж, ижил агуулгаар 3 долоо хоногийн танхимын хөтөлбөр амжилттай явуулсан.</p>
+        <ul class="cred-list">
+          <li><b>Amazon</b><span>Software Development Director</span></li>
+          <li><b>Microsoft</b><span>Technical Strategy Director</span></li>
+          <li><b>Code.org түнш байгууллага</b><span>Технологийн захирал</span></li>
+          <li><b>DigiPen Institute of Technology</b><span>Багш</span></li>
+          <li><b>2026 зун</b><span>Монголд биечлэн ирж 3 долоо хоног заасан</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section id="curriculum">
+  <div class="wrap">
+    <div class="eyebrow">16 долоо хоног // 5 үе шат</div>
+    <h2 class="reveal">Дата-с эхлээд Generative AI хүртэл.</h2>
+    <p class="lede reveal">Суурь дата шинжилгээнээс эхлээд өөрийн Capstone төслөө хамгаалах хүртэл — алхам алхмаар гүнзгийрнэ.</p>
+
+    <div class="phase-grid">
+      <div class="phase-card reveal">
+        <span class="phase-num">1</span>
+        <h3>Data Science</h3>
+        <span class="wk">Долоо хоног 1–5</span>
+        <p>Pandas, Matplotlib, Classification, Regression, Reinforcement Learning</p>
+      </div>
+      <div class="phase-card reveal">
+        <span class="phase-num">2</span>
+        <h3>Neural Networks</h3>
+        <span class="wk">Долоо хоног 6</span>
+        <p>Neural network-ийг ойлгож, өөрөө сургаж эхэлнэ</p>
+      </div>
+      <div class="phase-card reveal">
+        <span class="phase-num">3</span>
+        <h3>Computer Vision</h3>
+        <span class="wk">Долоо хоног 7–9</span>
+        <p>Face/Object Detection, Pose Landmarkers, Gesture Recognition, mini-project</p>
+      </div>
+      <div class="phase-card reveal">
+        <span class="phase-num">4</span>
+        <h3>Generative AI</h3>
+        <span class="wk">Долоо хоног 10–14</span>
+        <p>Text, Image, Vision-Language, Audio/Speech generation загварууд</p>
+      </div>
+      <div class="phase-card reveal">
+        <span class="phase-num">5</span>
+        <h3>Capstone</h3>
+        <span class="wk">Долоо хоног 15–16</span>
+        <p>Өөрийн төслөө хөгжүүлж, эцэст нь эцэг эхчүүдэд танилцуулна</p>
+      </div>
+    </div>
+
+    <details class="full-sched">
+      <summary>Бүтэн хуваарийг үзэх <span class="plus">+</span></summary>
+      <table class="sched-table">
+        <thead><tr><th>7хн</th><th>Огноо</th><th>Сэдэв</th></tr></thead>
+        <tbody>
+          <tr><td class="wk-num">1</td><td>10/11/26</td><td>Welcome! Introduction to AI</td></tr>
+          <tr><td class="wk-num">2</td><td>10/18/26</td><td>Data Science: Pandas ба Matplotlib-аар дата судлах</td></tr>
+          <tr class="break"><td></td><td>10/25/26</td><td>Амралт</td></tr>
+          <tr><td class="wk-num">3</td><td>11/8/26</td><td>Data Science: Scikit-Learn-ээр Classification Models</td></tr>
+          <tr><td class="wk-num">4</td><td>11/22/26</td><td>Data Science: Scikit-Learn-ээр Regression Model</td></tr>
+          <tr><td class="wk-num">5</td><td>12/6/26</td><td>Data Science: Reinforcement Learning</td></tr>
+          <tr class="break"><td></td><td>12/20/26</td><td>Амралт (баяр ёслолын өдрүүд)</td></tr>
+          <tr><td class="wk-num">6</td><td>1/3/27</td><td>Neural Networks танилцуулга ба сургалт</td></tr>
+          <tr><td class="wk-num">7</td><td>1/17/27</td><td>Computer Vision: Face/Object Detection, Pose Landmarkers</td></tr>
+          <tr><td class="wk-num">8</td><td>1/31/27</td><td>Computer Vision: Gesture Recognition, Image Segmentation</td></tr>
+          <tr><td class="wk-num">9</td><td>2/14/27</td><td>Computer Vision Mini-Project</td></tr>
+          <tr><td class="wk-num">10</td><td>2/28/27</td><td>Generative AI танилцуулга</td></tr>
+          <tr><td class="wk-num">11</td><td>3/14/27</td><td>Text Generation Models</td></tr>
+          <tr><td class="wk-num">12</td><td>3/28/27</td><td>Image Generation Models</td></tr>
+          <tr><td class="wk-num">13</td><td>4/11/27</td><td>Vision Language Models</td></tr>
+          <tr><td class="wk-num">14</td><td>4/25/27</td><td>Audio ба Speech Models</td></tr>
+          <tr><td class="wk-num">15</td><td>5/8/27</td><td>Capstone Project — хөгжүүлэлт</td></tr>
+          <tr><td class="wk-num">16</td><td>5/15/27</td><td>Capstone Project Showcase — эцэг эхчүүдтэй</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </div>
+</section>
+
+<!-- FORMAT -->
+<section id="format">
+  <div class="wrap">
+    <div class="eyebrow">Хуваарь ба формат</div>
+    <h2 class="reveal">Ням гараг бүр. Онлайнаар.</h2>
+    <p class="lede reveal">Хичээл бүр 2 цаг — үндсэн хичээл 1 цаг 45 мин, дараа нь 15 минут office hours.</p>
+
+    <div class="format-grid">
+      <div class="format-card reveal">
+        <div class="icon">◷</div>
+        <h3>Хуваарь</h3>
+        <p>Ням гараг бүр, 10:00–12:00 (Улаанбаатараар). 2026.10.11-с 2027.05.15 хүртэл, нийт 16 долоо хоног.</p>
+      </div>
+      <div class="format-card reveal">
+        <div class="icon">◎</div>
+        <h3>Формат</h3>
+        <p>Бүрэн онлайнаар, амьд (live) хичээллэнэ. Сүүлийн 15 минут нь дутуу ойлгосон сэдвээ асуух office hours.</p>
+      </div>
+      <div class="format-card reveal">
+        <div class="icon">✓</div>
+        <h3>Хэнд зориулагдсан</h3>
+        <p>Ахлах сургуулийн сурагч, эсвэл AI-ийн чиглэлээр ажиллахыг хүсч буй залуучууд. Python-ы суурь мэдлэг шаардлагатай.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="text-align:center;">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">Төлбөр</div>
+    <h2 class="reveal">Жилийн бүх хичээл нэг дор.</h2>
+    <p class="lede reveal" style="margin:0 auto;">16 долоо хоногийн бүтэн хөтөлбөр, амьд хичээл, office hours бүгд багтсан.</p>
+
+    <div class="price-card reveal">
+      <div style="font-size:13px; color:var(--text-faint); font-weight:600; text-transform:uppercase; letter-spacing:.06em;">Жилийн бүрэн хөтөлбөр</div>
+      <div class="price-amt grad-text">₮1,500,000</div>
+      <div class="price-note">2026.10.11 – 2027.05.15 · 16 долоо хоног</div>
+      <ul class="price-list">
+        <li>16 амьд онлайн хичээл (32 цаг)</li>
+        <li>Office hours хичээл бүрт</li>
+        <li>Capstone төсөл ба эцсийн танилцуулга</li>
+        <li>Amazon/Microsoft туршлагатай багш</li>
+      </ul>
+      <a class="btn-primary" href="https://forms.gle/6uQJT6qrsiUJbDrT9" target="_blank" rel="noopener" style="display:block;">Бүртгүүлэх →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Асуулт хариулт</div>
+    <h2 class="reveal">Түгээмэл асуултууд.</h2>
+
+    <div class="faq-list">
+      <details class="faq-item reveal">
+        <summary>Python-ы ямар түвшний мэдлэг шаардлагатай вэ?<span class="plus">+</span></summary>
+        <div class="faq-a">Python-ы суурь синтакс (хувьсагч, функц, давталт, нөхцөл) мэддэг байх шаардлагатай. Жишээ нь Codercub-ийн CS1 хөтөлбөр, эсвэл өөр ямар нэгэн Python-ы курс дүүргэсэн бол хангалттай.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Хэн бүртгүүлж болох вэ?<span class="plus">+</span></summary>
+        <div class="faq-a">Ахлах сургуулийн сурагч, эсвэл насны хязгааргүй — AI, machine learning чиглэлээр ажиллахыг хүсч буй хэн ч Python-ы суурьтай бол бүртгүүлэх боломжтой.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Хичээлээ алдвал яах вэ?<span class="plus">+</span></summary>
+        <div class="faq-a">Хичээл бүрийг бичлэг хийж, дараа нь үзэх боломжтой болгоно. Дутуу ойлгосон сэдвээ дараагийн хичээлийн office hours дээр асууж болно.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Ямар төхөөрөмж хэрэгтэй вэ?<span class="plus">+</span></summary>
+        <div class="faq-a">Тогтвортой интернэттэй компьютер (Windows эсвэл Mac) хангалттай. Хэрэглэх программ хангамжийн заавар эхний хичээл дээр өгөгдөнө.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Хичээл ямар хэлээр явагдах вэ?<span class="plus">+</span></summary>
+        <div class="faq-a">Хичээл англи хэл дээр явагдана (багш Simon Guest англиар заана). Энэ нь мөн англи хэлний бодит хэрэглээний туршлага өгөх давуу талтай.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">2026-27 оны бүртгэл</div>
+    <h2>AI-ийн ирээдүйгээ өнөөдрөөс эхлүүл.</h2>
+    <p class="lede">Суудлын тоо хязгаартай. Формоо бөглөж, суудлаа баталгаажуулаарай.</p>
+    <a class="btn-primary" href="https://forms.gle/6uQJT6qrsiUJbDrT9" target="_blank" rel="noopener" style="font-size:15px; padding:16px 28px;">Бүртгүүлэх форм →</a>
+    <div class="cta-form-hint">forms.gle/6uQJT6qrsiUJbDrT9</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <p>Future Intelligence Lab — Codercub-ийн хөтөлбөр. 2018 оноос хойш.</p>
+    <div class="footer-links">
+      <a href="https://www.facebook.com/codercub" target="_blank" rel="noopener">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-sticky-cta">
+  <span class="msc-label">Жилийн хөтөлбөр<br>₮1,500,000</span>
+  <a class="msc-btn" href="https://forms.gle/6uQJT6qrsiUJbDrT9" target="_blank" rel="noopener">Бүртгүүлэх →</a>
+</div>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navlinks = document.getElementById('navlinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navlinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navlinks.querySelectorAll('.links a').forEach(a => {
+    a.addEventListener('click', () => {
+      navlinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
